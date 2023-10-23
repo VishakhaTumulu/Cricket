@@ -1,22 +1,51 @@
 public with sharing class BillAPI {
     
-    public static void getBills() {
+    public static List<Bill__c> getBills() {
         //start by creating an HttpRequest object and set the endpoint and method.
 
+        
+            HttpRequest req = new HttpRequest();
+            req.setEndpoint('https://my-json-server.typicode.com/grizzleevelyn/231017_dev_clicked/bills');
+            req.setMethod('GET');
 
         //set up an Http object and an HTTPResponse Object and use the .getBody() method here.
 
+        Http http = new Http();
+        HTTPResponse res = http.send(req);
+        String responseBody=res.getBody();
+        System.debug(res.getBody());
 
         //Use the following to deserialize the JSON response into a wrapper class:
-
+        List<BillWrapper> bwList = (List<BillWrapper>)JSON.deserialize(responseBody, List<BillWrapper>.class);
 
         //create a list of bills to insert
-
+        List<Bill__c> billToInsertList = new List<Bill__c>();
 
         //query for active accounts (Active__c = 'Yes')
+        Map<String, Id> accountMap = new Map<String, Id>();
 
+        List<Account> activeAccounts = [SELECT Id, Name FROM Account WHERE Active__c = 'Yes'];
+
+        for (Account acc : activeAccounts) {
+        accountMap.put(acc.Name, acc.Id);
+        }
 
         //create an active account map in the form of Map<String, Id>
+
+        for(BillWrapper billWrapper : bwList) {
+            Bill__c billToInsert = new Bill__c();
+            billToInsert.Bill_Id__c = billWrapper.billId;
+            billToInsert.Balance__c = Decimal.valueOf(billWrapper.balance.replace('$', ''));
+            billToInsert.Account__c = accountMap.get(billWrapper.accountName);
+            billToInsertList.add(billToInsert);
+        }
+
+    
+        insert billToInsertList;
+
+        return [SELECT Id, Bill_Id__c, Balance__c, Account__r.Name FROM Bill__c WHERE Id IN :billToInsertList];
+}
+
 
 
         //iterate over the list of active accounts, and use the .put() method of the Map class
@@ -34,7 +63,6 @@ public with sharing class BillAPI {
 
         //finally, insert the new bills list
 
-    }
 
     //this is what's known as a wrapper class. A wrapper class
     //allows us to create an instance of a class with the properties
@@ -57,3 +85,4 @@ public with sharing class BillAPI {
         public String balance;
     }
 }
+

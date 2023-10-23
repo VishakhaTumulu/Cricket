@@ -1,6 +1,6 @@
 public with sharing class BillEmailer {
     
-    public static void sendEmails(Map<String, Blob> emailsWithBills) {
+    /*public static void sendEmails(Map<String, Blob> emailsWithBills) {
         //instantiate a list of Messaging.SingleEmailMessage objects
 
 
@@ -27,10 +27,10 @@ public with sharing class BillEmailer {
         Messaging.SendEmailResult[] results = Messaging.sendEmail(emailsToSend);
         // Call a helper method to inspect the returned results
         inspectResults(results);
-    }
+    }*/
 
     //this is a method that will allow you to check to see if your code works.
-    private static Boolean inspectResults(Messaging.SendEmailResult[] results) {
+   /* private static Boolean inspectResults(Messaging.SendEmailResult[] results) {
         Boolean sendResult = true;
         // sendEmail returns an array of result objects.
         // Iterate through the list to inspect results. 
@@ -46,5 +46,5 @@ public with sharing class BillEmailer {
             }
         }
         return sendResult;
-    }
+    }*/
 }

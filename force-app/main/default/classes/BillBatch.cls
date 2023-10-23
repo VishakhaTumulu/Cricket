@@ -1,6 +1,8 @@
-public with sharing class BillBatch implements Database.Batchable<sObject>, Database.AllowsCallouts, Database.Stateful {
+public with sharing class BillBatch  {
+
+    //implements Database.Batchable<sObject>, Database.AllowsCallouts, Database.Stateful 
     
-    public List<Id> receivesBillByEmail = new List<Id>();
+   /* public List<Id> receivesBillByEmail = new List<Id>();
     
     public Database.QueryLocator start(Database.BatchableContext bc) {
         //this is a method that will query for all accounts that are active and have a value
@@ -54,5 +56,5 @@ public with sharing class BillBatch implements Database.Batchable<sObject>, Data
         //so there will be no return value;
 
 
-    }
+    }*/
 }
